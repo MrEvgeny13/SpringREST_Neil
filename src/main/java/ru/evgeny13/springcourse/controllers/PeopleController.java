@@ -14,7 +14,7 @@ import javax.validation.Valid;
 @RequestMapping("/people")
 public class PeopleController {
 
-    private PersonDAO personDAO;
+    private final PersonDAO personDAO;
 
     @Autowired
     public PeopleController(PersonDAO personDAO) {
@@ -27,7 +27,7 @@ public class PeopleController {
         return "people/index";
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("person", personDAO.show(id));
         return "people/show";
@@ -39,7 +39,8 @@ public class PeopleController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
+    public String create(@ModelAttribute("person") @Valid Person person,
+                         BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "people/new";
 
